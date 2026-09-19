@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Auto 76 – Véhicules sélectionnés</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0C0E11; --surface:#15181D; --surface-2:#1C2027; --ink:#F3F5F1; --muted:#8D98A1; --line:#262B32;
+  --acc:#FF5A2E; --on-acc:#0C0E11; --lime:#C8F169; --on-lime:#0C0E11;
+  --radius:14px;
+  --display:"Space Grotesk","Helvetica Neue",Arial,sans-serif;
+  --body:"Inter","Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+
+/* En-tête */
+header.top{border-bottom:1px solid var(--line);background:var(--bg)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:14px;padding-bottom:14px;flex-wrap:wrap}
+.brand{font-family:var(--display);font-weight:700;font-size:22px;text-decoration:none;letter-spacing:-.01em;color:var(--ink)}
+.brand span{color:var(--acc)}
+nav a{margin-left:20px;text-decoration:none;font-weight:500;font-size:15px;color:var(--muted)}
+nav a:hover{color:var(--acc)}
+
+/* Hero */
+.hero{padding:72px 0 44px;position:relative}
+.hero h1{font-family:var(--display);font-weight:700;font-size:clamp(38px,6.4vw,72px);line-height:1.02;letter-spacing:-.03em;margin:0 0 18px;max-width:14ch}
+.hero p.lead{font-size:18px;color:var(--muted);max-width:52ch;margin:0 0 32px}
+
+/* Barre de recherche en forme de plaque */
+.plate{display:flex;background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;max-width:980px;box-shadow:0 30px 60px -30px rgba(0,0,0,.6)}
+.plate .band{background:var(--acc);color:var(--on-acc);width:58px;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:10px 0;font-family:var(--display);font-weight:700;font-size:20px}
+.plate .band i{display:block;width:20px;height:20px;border:2px solid var(--on-acc);border-radius:50%;margin-bottom:auto;margin-top:2px;opacity:.55}
+.plate .fields{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;flex:1}
+.field{padding:10px 16px;border-left:1px solid var(--line);display:flex;flex-direction:column;justify-content:center;min-width:0}
+.field:first-child{border-left:0}
+.field label{font-size:12.5px;font-weight:600;color:var(--muted);margin-bottom:2px}
+.field input,.field select{font:inherit;font-size:16px;font-weight:500;color:var(--ink);background:transparent;border:0;padding:2px 0;width:100%;min-width:0}
+.field input:focus-visible,.field select:focus-visible{outline:none}
+.field:focus-within{box-shadow:inset 0 -3px 0 var(--acc)}
+.field select option{color:#16232B;background:#fff}
+
+
+/* Bandeau de confiance */
+.trust{border-top:1px solid var(--line);background:var(--surface)}
+.trust .wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+.trust .item{display:flex;gap:14px;align-items:flex-start;padding:22px 20px;border-left:1px solid var(--line)}
+.trust .item:first-child{border-left:0}
+.trust .ic{flex:none;width:42px;height:42px;border-radius:11px;background:var(--lime);color:var(--on-lime);display:flex;align-items:center;justify-content:center}
+.trust .ic svg{width:22px;height:22px}
+.trust h3{font-family:var(--display);font-size:16px;margin:0 0 3px;letter-spacing:-.01em}
+.trust p{margin:0;color:var(--muted);font-size:14px;line-height:1.4}
+@media (max-width:820px){
+  .trust .wrap{grid-template-columns:1fr}
+  .trust .item{border-left:0;border-top:1px solid var(--line)}
+  .trust .item:first-child{border-top:0}
+}
+
+/* Liste */
+.stock{padding:24px 0 64px}
+.bar{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.bar h2{font-family:var(--display);font-size:28px;margin:0;letter-spacing:-.01em}
+.bar .meta{display:flex;gap:12px;align-items:center;color:var(--muted);font-size:15px}
+.bar select{font:inherit;font-size:15px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;cursor:pointer;transition:transform .18s ease,border-color .18s ease}
+.card:hover{border-color:var(--acc);transform:translateY(-3px)}
+.photo{aspect-ratio:16/10;background:var(--bg);display:flex;align-items:center;justify-content:center;overflow:hidden;border-bottom:1px solid var(--line)}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.photo svg{width:78%;height:auto}
+.card .body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.card h3{font-family:var(--display);font-size:19px;line-height:1.2;margin:0}
+.card .sub{color:var(--muted);font-size:14px;margin:0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 4px}
+.chip{font-size:13px;border:1px solid var(--line);border-radius:999px;padding:2px 10px;color:var(--muted)}
+.card .foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:8px}
+.price{font-family:var(--display);font-weight:700;font-size:22px;color:var(--acc)}
+.tag{background:var(--lime);color:var(--on-lime);font-size:12.5px;font-weight:600;padding:2px 8px;border-radius:4px}
+.btn{font:inherit;font-weight:600;font-size:15px;border:2px solid var(--ink);background:var(--ink);color:var(--bg);border-radius:9px;padding:9px 16px;cursor:pointer;text-decoration:none;display:inline-block;transition:transform .12s ease}
+.btn:hover{transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--acc);color:var(--acc)}
+.btn.blue{background:var(--acc);border-color:var(--acc);color:var(--on-acc)}
+.empty{grid-column:1/-1;padding:40px 20px;text-align:center;border:1px dashed var(--line);border-radius:var(--radius);color:var(--muted)}
+.empty button{margin-top:12px}
+
+/* Fonctionnement */
+.how{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:64px 0}
+.how h2,.contact h2{font-family:var(--display);font-size:30px;margin:0 0 8px;letter-spacing:-.01em}
+.how .intro{color:var(--muted);max-width:56ch;margin:0 0 32px}
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;counter-reset:s}
+.steps li{counter-increment:s;border-top:3px solid var(--acc);padding-top:12px}
+.steps li::before{content:"Étape " counter(s);display:block;font-size:13px;font-weight:600;color:var(--acc);margin-bottom:4px}
+.steps h3{font-family:var(--display);font-size:19px;margin:0 0 6px}
+.steps p{margin:0;color:var(--muted);font-size:15px}
+
+/* Contact */
+.contact{padding:56px 0}
+.contact .cols{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.contact p{color:var(--muted);max-width:44ch}
+form.f{display:grid;gap:12px}
+form.f label{font-size:14px;font-weight:600;display:grid;gap:4px}
+form.f input,form.f textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;width:100%}
+form.f textarea{min-height:110px;resize:vertical}
+
+footer{border-top:1px solid var(--line);padding:24px 0 40px;color:var(--muted);font-size:14px}
+footer p{margin:4px 0;max-width:80ch}
+
+/* Fiche véhicule */
+dialog{border:0;padding:0;border-radius:14px;background:var(--surface);color:var(--ink);width:min(720px,94vw);max-height:92vh;overflow:auto}
+dialog::backdrop{background:rgba(10,18,22,.6)}
+.fiche .photo{border-bottom:1px solid var(--line)}
+.fiche .in{padding:20px 22px 24px}
+.fiche h3{font-family:var(--display);font-size:26px;margin:0}
+.fiche .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.close{font:inherit;font-size:22px;line-height:1;background:transparent;border:1px solid var(--line);color:var(--ink);border-radius:8px;width:38px;height:38px;cursor:pointer;flex:none}
+dl.spec{display:grid;grid-template-columns:repeat(2,1fr);gap:0 24px;margin:18px 0}
+dl.spec div{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line);padding:8px 0}
+dl.spec dt{color:var(--muted)} dl.spec dd{margin:0;font-weight:600;text-align:right}
+.opts{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 18px}
+.actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+
+@media (max-width:820px){
+  .plate{flex-direction:column}
+  .plate .band{width:100%;flex-direction:row;justify-content:flex-start;gap:10px;padding:6px 14px;font-size:16px}
+  .plate .band i{margin:0;width:16px;height:16px}
+  .plate .fields{grid-template-columns:1fr 1fr}
+  .field{border-left:0;border-top:1px solid var(--line)}
+  .field:first-child{grid-column:1/-1;border-top:0}
+  .contact .cols{grid-template-columns:1fr}
+  nav a{margin:0 16px 0 0}
+  dl.spec{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#" id="brand">Auto <span>76</span></a>
+    <nav aria-label="Navigation principale">
+      <a href="#vehicules">Véhicules</a>
+      <a href="#fonctionnement">Fonctionnement</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap">
+    <h1>Le bon véhicule, acheté au bon prix.</h1>
+    <p class="lead">Je sélectionne des voitures auprès de mon réseau de professionnels et je m'occupe de l'achat pour vous, de la recherche jusqu'à la remise des clés.</p>
+
+    <div class="plate" role="search" aria-label="Filtrer les véhicules">
+      <div class="band" aria-hidden="true"><i></i>F</div>
+      <div class="fields">
+        <div class="field"><label for="q">Marque ou modèle</label><input id="q" type="search" placeholder="Golf, Clio, BMW…" autocomplete="off"></div>
+        <div class="field"><label for="fMarque">Marque</label><select id="fMarque"><option value="">Toutes</option></select></div>
+        <div class="field"><label for="fEnergie">Énergie</label><select id="fEnergie"><option value="">Toutes</option></select></div>
+        <div class="field"><label for="fBudget">Budget max</label>
+          <select id="fBudget">
+            <option value="">Sans limite</option>
+            <option value="10000">10 000 €</option>
+            <option value="15000">15 000 €</option>
+            <option value="20000">20 000 €</option>
+            <option value="30000">30 000 €</option>
+            <option value="40000">40 000 €</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="trust" aria-label="Nos garanties">
+  <div class="wrap">
+    <div class="item">
+      <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+      <div><h3>Un grand réseau de professionnels</h3><p>Chaque véhicule est sourcé auprès de professionnels de l'automobile sélectionnés, partout en France.</p></div>
+    </div>
+    <div class="item">
+      <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg></span>
+      <div><h3>Garantie constructeur quand elle court encore</h3><p>Si le véhicule est encore sous garantie d'origine, vous en profitez sans démarche supplémentaire.</p></div>
+    </div>
+    <div class="item">
+      <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span>
+      <div><h3>Sinon, garantie 12 mois incluse</h3><p>Sans garantie constructeur en cours, chaque véhicule est couvert 12 mois, pièces et main-d'œuvre.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="stock" id="vehicules">
+  <div class="wrap">
+    <div class="bar">
+      <h2>Véhicules disponibles</h2>
+      <div class="meta">
+        <span id="count" aria-live="polite"></span>
+        <label for="tri" class="sr" style="position:absolute;left:-9999px">Trier par</label>
+        <select id="tri">
+          <option value="prix-asc">Prix croissant</option>
+          <option value="prix-desc">Prix décroissant</option>
+          <option value="annee-desc">Plus récents</option>
+          <option value="km-asc">Kilométrage croissant</option>
+        </select>
+      </div>
+    </div>
+    <div class="grid" id="grid"><div class="empty">Chargement des véhicules…</div></div>
+  </div>
+</section>
+
+<section class="how" id="fonctionnement">
+  <div class="wrap">
+    <h2>Comment fonctionne un achat par mandataire</h2>
+    <p class="intro">Vous me confiez un mandat d'achat : j'achète le véhicule en votre nom auprès d'un professionnel, sans que vous ayez à gérer les démarches.</p>
+    <ol class="steps">
+      <li><h3>Vous choisissez</h3><p>Parcourez les véhicules ou décrivez ce que vous cherchez : modèle, budget, énergie.</p></li>
+      <li><h3>Je vérifie</h3><p>Je contrôle l'annonce, l'historique et l'état du véhicule auprès du professionnel.</p></li>
+      <li><h3>Nous signons le mandat</h3><p>Le mandat d'achat précise le véhicule, le prix et ma rémunération.</p></li>
+      <li><h3>Vous recevez le véhicule</h3><p>Les papiers et la carte grise sont traités, puis le véhicule vous est remis.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap cols">
+    <div>
+      <h2>Un modèle précis en tête ?</h2>
+      <p>Décrivez-le-moi. Mon réseau reçoit de nouveaux véhicules chaque semaine, et je vous réponds sous 24 heures ouvrées.</p>
+      <p id="coord"></p>
+    </div>
+    <form class="f" id="form">
+      <label>Votre nom<input name="nom" required autocomplete="name"></label>
+      <label>Téléphone ou e-mail<input name="contact" required autocomplete="email"></label>
+      <label>Votre recherche<textarea name="msg" placeholder="Ex. : SUV hybride, moins de 60 000 km, budget 25 000 €" required></textarea></label>
+      <button class="btn blue" type="submit">Envoyer ma demande</button>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><strong id="fNom">Auto 76</strong> – Entreprise individuelle – SIRET : 000 000 000 00000 – Mandataire automobile</p>
+    <p>Prix affichés TTC, hors frais de mandat et de carte grise, sous réserve de disponibilité. Les véhicules sont proposés par des professionnels partenaires.</p>
+    <p><a href="#">Mentions légales</a> · <a href="#">Politique de confidentialité</a></p>
+  </div>
+</footer>
+
+<dialog id="fiche" aria-label="Fiche du véhicule"></dialog>
+
+<script>
+/* ============================================================
+   CONFIGURATION – à modifier
+   ============================================================ */
+const CONFIG = {
+  NOM: "Auto 76",
+  EMAIL: "contact@exemple.fr",
+  TEL: "06 00 00 00 00",
+  API_URL: "",      // ← URL de l'API fournie par votre réseau
+  API_KEY: ""       // ← clé d'accès si nécessaire (à ne pas exposer côté navigateur en production)
+};
+
+/* ============================================================
+   BRANCHEMENT API
+   Seule la fonction normalize() dépend du format de l'API.
+   Elle transforme un véhicule "brut" en objet utilisé par le site.
+   ============================================================ */
+function normalize(raw){
+  return {
+    id:        raw.id,
+    marque:    raw.marque    ?? raw.make,
+    modele:    raw.modele    ?? raw.model,
+    version:   raw.version   ?? "",
+    annee:     raw.annee     ?? raw.year,
+    km:        raw.km        ?? raw.mileage,
+    prix:      raw.prix      ?? raw.price,
+    energie:   raw.energie   ?? raw.fuel,
+    boite:     raw.boite     ?? raw.gearbox,
+    puissance: raw.puissance ?? raw.power,
+    couleur:   raw.couleur   ?? raw.color ?? "#8A9AA3",
+    photo:     raw.photo     ?? (raw.photos && raw.photos[0]) ?? "",
+    options:   raw.options   ?? [],
+    nouveau:   !!raw.nouveau
+  };
+}
+
+async function fetchVehicles(){
+  if(!CONFIG.API_URL) return DEMO.map(normalize);
+  try{
+    const headers = CONFIG.API_KEY ? {Authorization:"Bearer "+CONFIG.API_KEY} : {};
+    const r = await fetch(CONFIG.API_URL,{headers});
+    if(!r.ok) throw new Error(r.status);
+    const d = await r.json();
+    return (Array.isArray(d) ? d : (d.vehicles || d.data || [])).map(normalize);
+  }catch(e){
+    console.warn("API indisponible, données de démonstration affichées.", e);
+    return DEMO.map(normalize);
+  }
+}
+
+/* Données de démonstration (remplacées par l'API) */
+const DEMO = [
+  {id:1,marque:"Peugeot",modele:"308",version:"1.5 BlueHDi 130 Allure",annee:2022,km:38500,prix:19490,energie:"Diesel",boite:"Automatique",puissance:"130 ch",couleur:"#4A5A68",options:["GPS","Caméra de recul","Régulateur adaptatif","Apple CarPlay"],nouveau:true},
+  {id:2,marque:"Renault",modele:"Clio V",version:"1.0 TCe 90 Evolution",annee:2021,km:46200,prix:13290,energie:"Essence",boite:"Manuelle",puissance:"90 ch",couleur:"#B8442F",options:["Écran tactile","Aide au stationnement"]},
+  {id:3,marque:"Volkswagen",modele:"Golf 8",version:"1.5 eTSI 150 Style",annee:2022,km:29800,prix:23900,energie:"Hybride léger",boite:"Automatique",puissance:"150 ch",couleur:"#2E4B7A",options:["Phares LED matriciels","Cockpit digital","Sièges chauffants"]},
+  {id:4,marque:"BMW",modele:"Série 1",version:"118i 140 Business Design",annee:2021,km:52100,prix:21750,energie:"Essence",boite:"Automatique",puissance:"140 ch",couleur:"#1E2226",options:["Navigation Professional","Climatisation auto","Jantes 17\""]},
+  {id:5,marque:"Citroën",modele:"C3",version:"PureTech 83 Feel",annee:2020,km:61400,prix:9990,energie:"Essence",boite:"Manuelle",puissance:"83 ch",couleur:"#C9A227",options:["Bluetooth","Radar de recul"]},
+  {id:6,marque:"Tesla",modele:"Model 3",version:"Propulsion",annee:2022,km:41000,prix:27800,energie:"Électrique",boite:"Automatique",puissance:"283 ch",couleur:"#8B949B",options:["Autopilot","Toit vitré","Batterie 60 kWh"],nouveau:true},
+  {id:7,marque:"Toyota",modele:"Yaris Cross",version:"Hybride 116h Design",annee:2023,km:18900,prix:24490,energie:"Hybride",boite:"Automatique",puissance:"116 ch",couleur:"#5F7D5B",options:["Caméra 360°","Garantie constructeur","Apple CarPlay"]},
+  {id:8,marque:"Dacia",modele:"Duster",version:"1.3 TCe 130 Prestige",annee:2021,km:57300,prix:15900,energie:"Essence",boite:"Manuelle",puissance:"130 ch",couleur:"#A67C4E",options:["4 roues motrices","Caméra multi-vues","Barres de toit"]}
+];
+
+/* ============================================================
+   AFFICHAGE
+   ============================================================ */
+const $ = s => document.querySelector(s);
+const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const eur = n => new Intl.NumberFormat("fr-FR",{style:"currency",currency:"EUR",maximumFractionDigits:0}).format(n);
+const num = n => new Intl.NumberFormat("fr-FR").format(n);
+
+function carSVG(color){
+  return `<svg viewBox="0 0 320 140" role="img" aria-label="Illustration de véhicule">
+    <ellipse cx="160" cy="128" rx="140" ry="6" fill="currentColor" opacity=".08"/>
+    <path d="M20 98C20 86 30 82 46 80L82 60C92 52 104 48 120 48H188C204 48 216 54 228 64L252 80C272 82 296 86 300 98V108H20Z" fill="${esc(color)}"/>
+    <path d="M92 64C98 58 106 54 118 54H150V78H72Z" fill="#DCE6EC" opacity=".85"/>
+    <path d="M160 54H188C198 54 206 58 214 65L232 78H160Z" fill="#DCE6EC" opacity=".85"/>
+    <circle cx="78" cy="110" r="21" fill="#1B2329"/><circle cx="78" cy="110" r="9" fill="#AEBAC1"/>
+    <circle cx="244" cy="110" r="21" fill="#1B2329"/><circle cx="244" cy="110" r="9" fill="#AEBAC1"/>
+  </svg>`;
+}
+function photoHTML(v){
+  const fallback = carSVG(v.couleur);
+  if(!v.photo) return fallback;
+  return `<img src="${esc(v.photo)}" alt="${esc(v.marque+" "+v.modele)}" loading="lazy" data-fallback="1">`;
+}
+
+let ALL = [];
+
+function filtered(){
+  const q = $("#q").value.trim().toLowerCase();
+  const m = $("#fMarque").value, e = $("#fEnergie").value, b = Number($("#fBudget").value)||Infinity;
+  let list = ALL.filter(v =>
+    (!q || (v.marque+" "+v.modele+" "+v.version).toLowerCase().includes(q)) &&
+    (!m || v.marque===m) && (!e || v.energie===e) && v.prix<=b);
+  const [k,d] = $("#tri").value.split("-");
+  const key = {prix:"prix",annee:"annee",km:"km"}[k];
+  list.sort((a,c)=> d==="asc" ? a[key]-c[key] : c[key]-a[key]);
+  return list;
+}
+
+function render(){
+  const list = filtered();
+  $("#count").textContent = list.length + (list.length>1 ? " véhicules" : " véhicule");
+  if(!list.length){
+    $("#grid").innerHTML = `<div class="empty">Aucun véhicule ne correspond à ces critères.<br><button class="btn ghost" id="reset">Réinitialiser les filtres</button></div>`;
+    $("#reset").onclick = () => { $("#q").value=""; $("#fMarque").value=""; $("#fEnergie").value=""; $("#fBudget").value=""; render(); };
+    return;
+  }
+  $("#grid").innerHTML = list.map(v => `
+    <article class="card" data-id="${esc(v.id)}">
+      <div class="photo">${photoHTML(v)}</div>
+      <div class="body">
+        <h3>${esc(v.marque)} ${esc(v.modele)}</h3>
+        <p class="sub">${esc(v.version)}</p>
+        <div class="chips">
+          <span class="chip">${esc(v.annee)}</span>
+          <span class="chip">${num(v.km)} km</span>
+          <span class="chip">${esc(v.energie)}</span>
+          <span class="chip">${esc(v.boite)}</span>
+        </div>
+        <div class="foot">
+          <span class="price">${eur(v.prix)}</span>
+          ${v.nouveau ? '<span class="tag">Nouveau</span>' : ''}
+          <button class="btn ghost" data-open="${esc(v.id)}">Voir la fiche</button>
+        </div>
+      </div>
+    </article>`).join("");
+  document.querySelectorAll("img[data-fallback]").forEach(img=>{
+    img.addEventListener("error",()=>{
+      const v = ALL.find(x=>String(x.id)===img.closest(".card").dataset.id);
+      img.parentElement.innerHTML = carSVG(v ? v.couleur : "#8A9AA3");
+    },{once:true});
+  });
+}
+
+function fillFilters(){
+  const uniq = k => [...new Set(ALL.map(v=>v[k]).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"fr"));
+  $("#fMarque").innerHTML = '<option value="">Toutes</option>' + uniq("marque").map(x=>`<option>${esc(x)}</option>`).join("");
+  $("#fEnergie").innerHTML = '<option value="">Toutes</option>' + uniq("energie").map(x=>`<option>${esc(x)}</option>`).join("");
+}
+
+/* Fiche véhicule */
+const dlg = $("#fiche");
+function openFiche(id){
+  const v = ALL.find(x=>String(x.id)===String(id)); if(!v) return;
+  const sujet = encodeURIComponent(`Demande d'information – ${v.marque} ${v.modele} ${v.annee}`);
+  dlg.innerHTML = `
+    <div class="fiche">
+      <div class="photo">${photoHTML(v)}</div>
+      <div class="in">
+        <div class="top">
+          <div><h3>${esc(v.marque)} ${esc(v.modele)}</h3><p class="sub" style="margin:2px 0 0;color:var(--muted)">${esc(v.version)}</p></div>
+          <button class="close" aria-label="Fermer la fiche" id="closeFiche">×</button>
+        </div>
+        <p class="price" style="margin:12px 0 0">${eur(v.prix)} <span style="font-size:14px;font-weight:400;color:var(--muted)">TTC</span></p>
+        <dl class="spec">
+          <div><dt>Année</dt><dd>${esc(v.annee)}</dd></div>
+          <div><dt>Kilométrage</dt><dd>${num(v.km)} km</dd></div>
+          <div><dt>Énergie</dt><dd>${esc(v.energie)}</dd></div>
+          <div><dt>Boîte</dt><dd>${esc(v.boite)}</dd></div>
+          <div><dt>Puissance</dt><dd>${esc(v.puissance)}</dd></div>
+        </dl>
+        ${v.options && v.options.length ? `<strong>Équipements</strong><div class="opts">${v.options.map(o=>`<span class="chip">${esc(o)}</span>`).join("")}</div>` : ""}
+        <div class="actions">
+          <a class="btn blue" href="mailto:${esc(CONFIG.EMAIL)}?subject=${sujet}">Je suis intéressé</a>
+          <a class="btn ghost" href="tel:${esc(CONFIG.TEL.replace(/\s/g,''))}">Appeler ${esc(CONFIG.TEL)}</a>
+        </div>
+      </div>
+    </div>`;
+  dlg.showModal();
+  $("#closeFiche").onclick = () => dlg.close();
+}
+dlg.addEventListener("click", e => { if(e.target===dlg) dlg.close(); });
+$("#grid").addEventListener("click", e => {
+  const card = e.target.closest(".card"); if(card) openFiche(card.dataset.id);
+});
+
+/* Formulaire de contact (ouvre le mail du visiteur ; à remplacer par un vrai envoi côté serveur) */
+$("#form").addEventListener("submit", e => {
+  e.preventDefault();
+  const f = new FormData(e.target);
+  const body = encodeURIComponent(`Nom : ${f.get("nom")}\nContact : ${f.get("contact")}\n\n${f.get("msg")}`);
+  location.href = `mailto:${CONFIG.EMAIL}?subject=${encodeURIComponent("Recherche de véhicule")}&body=${body}`;
+});
+
+/* Initialisation */
+document.title = CONFIG.NOM + " – Véhicules sélectionnés";
+(() => {
+  const parts = CONFIG.NOM.split(" ");
+  const num = parts.pop();
+  $("#brand").innerHTML = `${esc(parts.join(" "))} <span id="brandNum">${esc(num)}</span>`;
+})();
+$("#fNom").textContent = CONFIG.NOM;
+$("#coord").innerHTML = `${esc(CONFIG.TEL)}<br>${esc(CONFIG.EMAIL)}`;
+["q","fMarque","fEnergie","fBudget","tri"].forEach(id => $("#"+id).addEventListener("input", render));
+fetchVehicles().then(list => { ALL = list; fillFilters(); render(); });
+</script>
+</body>
+</html>
