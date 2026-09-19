@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Auto 76, mandataire automobile : véhicules récents et quasi neufs sélectionnés auprès de professionnels, garantie incluse.">
 <title>Auto 76 – Véhicules sélectionnés</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -128,6 +129,30 @@ dl.spec dt{color:var(--muted)} dl.spec dd{margin:0;font-weight:600;text-align:ri
 .opts{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 18px}
 .actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 
+/* Accroche véhicules récents */
+.hero .fresh{display:inline-flex;align-items:center;gap:10px;margin:-14px 0 30px;padding:9px 14px;border:1px solid var(--line);background:var(--surface);border-radius:12px;font-size:15px;font-weight:500;max-width:60ch}
+.hero .fresh .dot{width:9px;height:9px;border-radius:50%;background:var(--lime);flex:none}
+
+/* Formulaire : mention RGPD */
+.rgpd{margin:0;font-size:13px;color:var(--muted);max-width:none}
+.rgpd a,footer .legal-links a{color:var(--muted)}
+.rgpd a:hover,footer .legal-links a:hover{color:var(--acc)}
+footer .legal-links{margin:10px 0 0;display:flex;flex-wrap:wrap;gap:6px 18px}
+
+/* Documents juridiques */
+#legal{width:min(820px,94vw)}
+.doc .dh{position:sticky;top:0;z-index:1;background:var(--surface);display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 24px;border-bottom:1px solid var(--line)}
+.doc .dh h2{font-family:var(--display);font-size:22px;margin:0;letter-spacing:-.01em}
+.doc .in{padding:4px 24px 32px}
+.doc h3{font-family:var(--display);font-size:17px;margin:26px 0 6px;letter-spacing:-.005em}
+.doc p,.doc li{color:#C9D1D6;font-size:15px;line-height:1.6;max-width:72ch}
+.doc p{margin:0 0 10px}
+.doc ul{margin:0 0 10px;padding-left:20px}
+.doc li{margin-bottom:4px}
+.doc .maj{color:var(--muted);font-size:13px;margin-top:18px}
+.doc a{color:var(--acc)}
+.doc mark.todo{background:rgba(255,90,46,.18);color:var(--acc);padding:0 5px;border-radius:4px}
+
 @media (max-width:820px){
   .plate{flex-direction:column}
   .plate .band{width:100%;flex-direction:row;justify-content:flex-start;gap:10px;padding:6px 14px;font-size:16px}
@@ -159,6 +184,7 @@ dl.spec dt{color:var(--muted)} dl.spec dd{margin:0;font-weight:600;text-align:ri
   <div class="wrap">
     <h1>Le bon véhicule, acheté au bon prix.</h1>
     <p class="lead">Je sélectionne des voitures auprès de mon réseau de professionnels et je m'occupe de l'achat pour vous, de la recherche jusqu'à la remise des clés.</p>
+    <p class="fresh"><span class="dot" aria-hidden="true"></span>Des véhicules récents et, selon les arrivages, certains avec à peine 10 km au compteur.</p>
 
     <div class="plate" role="search" aria-label="Filtrer les véhicules">
       <div class="band" aria-hidden="true"><i></i>F</div>
@@ -243,6 +269,7 @@ dl.spec dt{color:var(--muted)} dl.spec dd{margin:0;font-weight:600;text-align:ri
       <label>Téléphone ou e-mail<input name="contact" required autocomplete="email"></label>
       <label>Votre recherche<textarea name="msg" placeholder="Ex. : SUV hybride, moins de 60 000 km, budget 25 000 €" required></textarea></label>
       <button class="btn blue" type="submit">Envoyer ma demande</button>
+      <p class="rgpd">Ces informations servent uniquement à répondre à votre demande. <a href="#confidentialite" data-legal="confidentialite">Politique de confidentialité</a></p>
     </form>
   </div>
 </section>
@@ -250,13 +277,20 @@ dl.spec dt{color:var(--muted)} dl.spec dd{margin:0;font-weight:600;text-align:ri
 
 <footer>
   <div class="wrap">
-    <p><strong id="fNom">Auto 76</strong> – Entreprise individuelle – SIRET : 000 000 000 00000 – Mandataire automobile</p>
+    <p><strong id="fNom">Auto 76</strong> – Entreprise individuelle – SIRET : <span id="fSiret"></span> – Mandataire automobile</p>
     <p>Prix affichés TTC, hors frais de mandat et de carte grise, sous réserve de disponibilité. Les véhicules sont proposés par des professionnels partenaires.</p>
-    <p><a href="#">Mentions légales</a> · <a href="#">Politique de confidentialité</a></p>
+    <nav class="legal-links" aria-label="Informations légales">
+      <a href="#mentions-legales" data-legal="mentions">Mentions légales</a>
+      <a href="#cgv" data-legal="cgv">Conditions générales de vente</a>
+      <a href="#cgu" data-legal="cgu">Conditions d'utilisation</a>
+      <a href="#confidentialite" data-legal="confidentialite">Politique de confidentialité</a>
+      <a href="#cookies" data-legal="cookies">Cookies</a>
+    </nav>
   </div>
 </footer>
 
 <dialog id="fiche" aria-label="Fiche du véhicule"></dialog>
+<dialog id="legal" aria-label="Informations légales"></dialog>
 
 <script>
 /* ============================================================
@@ -264,8 +298,19 @@ dl.spec dt{color:var(--muted)} dl.spec dd{margin:0;font-weight:600;text-align:ri
    ============================================================ */
 const CONFIG = {
   NOM: "Auto 76",
-  EMAIL: "contact@exemple.fr",
-  TEL: "06 00 00 00 00",
+  EMAIL: "mandataireauto76@gmail.com",
+  TEL: "06 49 37 57 23",
+
+  /* Informations légales : remplacez les zones entre crochets (elles s'affichent en surbrillance tant qu'elles ne sont pas remplies) */
+  ENTREPRENEUR: "Tony LEBOURG",
+  ADRESSE: "105 chemin du Raclon, 76360 Bouville",
+  SIRET: "538 819 632 00042",
+  IMMAT: "RCS de Rouen – n° 538 819 632",
+  TVA: "TVA non applicable, art. 293 B du CGI",
+  TRIBUNAL: "Rouen",
+  MEDIATEUR: "[Nom, adresse postale et site internet du médiateur de la consommation]",
+  HEBERGEUR: "GitHub, Inc. – 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis",
+  DATE_MAJ: "19 septembre 2026",
   API_URL: "",      // ← URL de l'API fournie par votre réseau
   API_KEY: ""       // ← clé d'accès si nécessaire (à ne pas exposer côté navigateur en production)
 };
@@ -317,7 +362,9 @@ const DEMO = [
   {id:5,marque:"Citroën",modele:"C3",version:"PureTech 83 Feel",annee:2020,km:61400,prix:9990,energie:"Essence",boite:"Manuelle",puissance:"83 ch",couleur:"#C9A227",options:["Bluetooth","Radar de recul"]},
   {id:6,marque:"Tesla",modele:"Model 3",version:"Propulsion",annee:2022,km:41000,prix:27800,energie:"Électrique",boite:"Automatique",puissance:"283 ch",couleur:"#8B949B",options:["Autopilot","Toit vitré","Batterie 60 kWh"],nouveau:true},
   {id:7,marque:"Toyota",modele:"Yaris Cross",version:"Hybride 116h Design",annee:2023,km:18900,prix:24490,energie:"Hybride",boite:"Automatique",puissance:"116 ch",couleur:"#5F7D5B",options:["Caméra 360°","Garantie constructeur","Apple CarPlay"]},
-  {id:8,marque:"Dacia",modele:"Duster",version:"1.3 TCe 130 Prestige",annee:2021,km:57300,prix:15900,energie:"Essence",boite:"Manuelle",puissance:"130 ch",couleur:"#A67C4E",options:["4 roues motrices","Caméra multi-vues","Barres de toit"]}
+  {id:8,marque:"Dacia",modele:"Duster",version:"1.3 TCe 130 Prestige",annee:2021,km:57300,prix:15900,energie:"Essence",boite:"Manuelle",puissance:"130 ch",couleur:"#A67C4E",options:["4 roues motrices","Caméra multi-vues","Barres de toit"]},
+  {id:9,marque:"Peugeot",modele:"3008",version:"Hybrid 136 e-DCS6 GT",annee:2026,km:10,prix:36900,energie:"Hybride",boite:"Automatique",puissance:"136 ch",couleur:"#3E4C5A",options:["Garantie constructeur","Peugeot i-Cockpit 3D","Caméra 360°","Toit ouvrant"]},
+  {id:10,marque:"Renault",modele:"Captur",version:"E-Tech full hybrid 145 Techno",annee:2026,km:18,prix:27900,energie:"Hybride",boite:"Automatique",puissance:"145 ch",couleur:"#C2452D",options:["Garantie constructeur","Écran 10,4\"","Aide au stationnement","Apple CarPlay"]}
 ];
 
 /* ============================================================
@@ -380,7 +427,7 @@ function render(){
         </div>
         <div class="foot">
           <span class="price">${eur(v.prix)}</span>
-          ${v.nouveau ? '<span class="tag">Nouveau</span>' : ''}
+          ${v.km < 100 ? '<span class="tag">Quasi neuf</span>' : (v.nouveau ? '<span class="tag">Nouveau</span>' : '')}
           <button class="btn ghost" data-open="${esc(v.id)}">Voir la fiche</button>
         </div>
       </div>
@@ -443,6 +490,255 @@ $("#form").addEventListener("submit", e => {
   location.href = `mailto:${CONFIG.EMAIL}?subject=${encodeURIComponent("Recherche de véhicule")}&body=${body}`;
 });
 
+/* ============================================================
+   DOCUMENTS JURIDIQUES
+   Les informations se modifient dans le bloc CONFIG en haut du script.
+   ============================================================ */
+const c = v => /^\[/.test(String(v)) ? `<mark class="todo">${esc(v)}</mark>` : esc(v);
+const lk = (k, t) => `<a href="#${k}" data-legal="${k}">${t}</a>`;
+
+const LEGAL = {
+  mentions: {
+    slug: "mentions-legales",
+    title: "Mentions légales",
+    html: () => `
+<h3>Éditeur du site</h3>
+<p><strong>${esc(CONFIG.NOM)}</strong>, entreprise individuelle exploitée par ${c(CONFIG.ENTREPRENEUR)}, mandataire automobile.</p>
+<ul>
+  <li>Adresse : ${c(CONFIG.ADRESSE)}</li>
+  <li>SIRET : ${c(CONFIG.SIRET)}</li>
+  <li>Immatriculation : ${c(CONFIG.IMMAT)}</li>
+  <li>TVA : ${c(CONFIG.TVA)}</li>
+  <li>E-mail : ${esc(CONFIG.EMAIL)}</li>
+  <li>Téléphone : ${esc(CONFIG.TEL)}</li>
+</ul>
+
+<h3>Directeur de la publication</h3>
+<p>${c(CONFIG.ENTREPRENEUR)}.</p>
+
+<h3>Hébergement</h3>
+<p>Le site est hébergé par ${esc(CONFIG.HEBERGEUR)}.</p>
+
+<h3>Activité</h3>
+<p>${esc(CONFIG.NOM)} intervient comme mandataire : il agit au nom et pour le compte de ses clients pour l'achat ou la vente de véhicules. Il n'est pas le vendeur des véhicules présentés sur ce site, qui sont proposés par des professionnels partenaires.</p>
+
+<h3>Propriété intellectuelle</h3>
+<p>La structure du site, ses textes, son logo et ses éléments graphiques sont protégés par le droit d'auteur. Les photographies et descriptions des véhicules sont fournies par les professionnels partenaires et restent leur propriété. Toute reproduction ou réutilisation sans autorisation écrite préalable est interdite.</p>
+
+<h3>Données personnelles et cookies</h3>
+<p>Le traitement de vos données est détaillé dans la ${lk("confidentialite", "politique de confidentialité")} et la ${lk("cookies", "politique de cookies")}.</p>
+
+<h3>Médiation de la consommation</h3>
+<p>Conformément aux articles L.611-1 et suivants du Code de la consommation, tout consommateur peut recourir gratuitement à un médiateur de la consommation pour résoudre à l'amiable un litige avec ${esc(CONFIG.NOM)}, après une première réclamation écrite restée sans réponse satisfaisante.</p>
+<p>Médiateur : ${c(CONFIG.MEDIATEUR)}.</p>
+
+<h3>Droit applicable</h3>
+<p>Le site et ses mentions légales sont soumis au droit français.</p>
+<p class="maj">Dernière mise à jour : ${esc(CONFIG.DATE_MAJ)}</p>`
+  },
+
+  cgv: {
+    slug: "cgv",
+    title: "Conditions générales de vente",
+    html: () => `
+<h3>Article 1 – Objet et champ d'application</h3>
+<p>Les présentes conditions générales de vente (« CGV ») s'appliquent à toutes les prestations de mandat d'achat ou de vente de véhicules proposées par ${esc(CONFIG.NOM)} (« le Mandataire ») à ses clients (« le Client »), qu'ils soient consommateurs ou professionnels.</p>
+<p>Elles complètent le mandat signé pour chaque opération. En cas de différence entre le mandat signé et les CGV, le mandat prévaut.</p>
+
+<h3>Article 2 – Nature de la prestation</h3>
+<p>Le Mandataire agit au nom et pour le compte du Client. Il recherche, sélectionne, vérifie et achète (ou vend) le véhicule selon les instructions inscrites au mandat.</p>
+<p>Le Mandataire n'est pas le vendeur du véhicule. La vente est conclue entre le Client et le professionnel vendeur, qui reste tenu de ses propres obligations de vendeur.</p>
+
+<h3>Article 3 – Le mandat</h3>
+<p>Chaque opération fait l'objet d'un mandat écrit, signé à la main ou par voie électronique, qui précise :</p>
+<ul>
+  <li>l'identité des parties ;</li>
+  <li>le véhicule concerné (marque, modèle, version, année, kilométrage, numéro de série si connu) ;</li>
+  <li>le prix du véhicule, ou le prix maximum autorisé ;</li>
+  <li>les honoraires du Mandataire ;</li>
+  <li>les modalités de paiement, le délai d'exécution et les conditions de remise.</li>
+</ul>
+<p>Le Mandataire ne peut pas dépasser les pouvoirs qui lui sont donnés. Toute modification du mandat nécessite l'accord écrit du Client.</p>
+
+<h3>Article 4 – Prix et honoraires</h3>
+<p>Les prix des véhicules affichés sur le site sont des prix TTC demandés par les professionnels vendeurs. Ils sont donnés sous réserve d'erreur et de disponibilité, et s'entendent hors frais de carte grise (taxes et redevance d'acheminement), hors frais de livraison éventuels et hors honoraires du Mandataire.</p>
+<p>Les honoraires du Mandataire sont indiqués dans le mandat. Le prix applicable est toujours celui du mandat signé. Une annonce sur le site ne constitue pas une offre ferme : le véhicule peut être vendu avant la signature du mandat.</p>
+
+<h3>Article 5 – Paiement</h3>
+<p>Les modalités de paiement sont fixées au mandat : acompte éventuel à la signature, puis solde avant la remise du véhicule. Le paiement s'effectue par virement bancaire ou par un autre moyen convenu par écrit. Les paiements en espèces sont soumis aux plafonds fixés par la loi.</p>
+<p>Pour les Clients professionnels, tout retard de paiement entraîne des pénalités égales à trois fois le taux d'intérêt légal, ainsi qu'une indemnité forfaitaire de 40 € pour frais de recouvrement.</p>
+
+<h3>Article 6 – Formalités et remise du véhicule</h3>
+<p>Le Client fournit les pièces nécessaires : pièce d'identité, justificatif de domicile de moins de trois mois, permis de conduire, attestation d'assurance et, si besoin, tout autre document demandé par le Mandataire.</p>
+<p>Lorsque le mandat le prévoit, le Mandataire effectue ou fait effectuer les démarches d'immatriculation au nom du Client.</p>
+<p>Les délais de remise sont donnés à titre indicatif, sauf engagement contraire au mandat. Le Client contrôle le véhicule à la remise et signe un procès-verbal de remise. Il indique par écrit toute réserve à ce moment-là.</p>
+
+<h3>Article 7 – Garanties</h3>
+<p>Le véhicule bénéficie des garanties légales : la garantie légale de conformité (articles L.217-3 et suivants du Code de la consommation, pour les consommateurs) et la garantie des vices cachés (articles 1641 et suivants du Code civil).</p>
+<p>Il bénéficie en outre d'une garantie commerciale : la garantie constructeur si elle est encore en cours à la date de remise et, à défaut, une garantie de 12 mois couvrant les pièces et la main-d'œuvre. Ses conditions, ses exclusions (usure normale, entretien, mauvais usage) et sa mise en œuvre figurent dans le certificat de garantie remis avec le véhicule.</p>
+<p>Les garanties commerciales s'ajoutent aux garanties légales sans les remplacer.</p>
+
+<h3>Article 8 – Droit de rétractation (consommateurs)</h3>
+<p>Si le Client est un consommateur et que le mandat est conclu à distance (internet, téléphone, e-mail) ou hors établissement, il dispose de 14 jours à compter de la conclusion du mandat pour se rétracter, sans motif et sans pénalité. Il notifie sa décision par e-mail ou par courrier. Un formulaire de rétractation est disponible sur simple demande.</p>
+<p>Si le Client demande que la prestation commence avant la fin de ce délai, il règle un montant proportionnel à ce qui a été réalisé jusqu'à sa rétractation.</p>
+<p>Si la prestation est entièrement réalisée avant la fin du délai, avec l'accord préalable exprès du Client et sa renonciation à son droit de rétractation, ce droit ne peut plus être exercé.</p>
+<p>Les Clients professionnels ne bénéficient pas de ce droit.</p>
+
+<h3>Article 9 – Responsabilité</h3>
+<p>Le Mandataire est tenu d'une obligation de moyens pour la recherche, la sélection et la vérification des véhicules. Il vérifie de bonne foi les informations transmises par le vendeur (annonce, historique, état apparent). Il ne peut pas être tenu responsable d'informations inexactes fournies par le vendeur qu'il ne pouvait raisonnablement pas déceler.</p>
+<p>Sa responsabilité est limitée aux dommages directs et prévisibles. Cette limite ne s'applique pas aux dommages corporels, à la faute lourde ni au dol, et ne réduit pas les droits que la loi reconnaît au consommateur. Aucune des parties n'est responsable d'un manquement causé par un cas de force majeure.</p>
+
+<h3>Article 10 – Indisponibilité du véhicule</h3>
+<p>Si le véhicule n'est plus disponible ou si le vendeur retire son offre avant la conclusion de la vente, le Mandataire en informe le Client sans délai. Le mandat peut alors être résilié. Les sommes versées au titre du prix du véhicule sont restituées dans les meilleurs délais, et les honoraires ne sont dus qu'à proportion des démarches réellement accomplies, selon ce que prévoit le mandat.</p>
+
+<h3>Article 11 – Données personnelles</h3>
+<p>Les données du Client sont traitées comme indiqué dans la ${lk("confidentialite", "politique de confidentialité")}.</p>
+
+<h3>Article 12 – Réclamations et médiation</h3>
+<p>Pour toute réclamation, écrivez à ${esc(CONFIG.EMAIL)}. Le Mandataire s'engage à répondre dans les meilleurs délais.</p>
+<p>Si le Client est un consommateur et que le litige persiste, il peut saisir gratuitement le médiateur de la consommation : ${c(CONFIG.MEDIATEUR)}.</p>
+
+<h3>Article 13 – Droit applicable et juridiction</h3>
+<p>Les CGV sont soumises au droit français. Le consommateur peut saisir la juridiction du lieu où il demeurait lors de la conclusion du contrat ou de la survenance du fait dommageable, ou toute autre juridiction compétente selon la loi. Pour les Clients professionnels, les juridictions compétentes de ${c(CONFIG.TRIBUNAL)} sont seules compétentes.</p>
+
+<h3>Article 14 – Modification des CGV</h3>
+<p>${esc(CONFIG.NOM)} peut modifier les CGV à tout moment. La version applicable à une opération est celle en vigueur à la date de signature du mandat.</p>
+<p class="maj">Dernière mise à jour : ${esc(CONFIG.DATE_MAJ)}</p>`
+  },
+
+  cgu: {
+    slug: "cgu",
+    title: "Conditions générales d'utilisation",
+    html: () => `
+<h3>1. Objet</h3>
+<p>Les présentes conditions régissent l'accès au site de ${esc(CONFIG.NOM)} et son utilisation. En naviguant sur le site, vous les acceptez.</p>
+
+<h3>2. Accès au site</h3>
+<p>Le site est accessible gratuitement, hors coût de votre connexion à internet. Il peut être interrompu à tout moment, notamment pour une opération de maintenance. ${esc(CONFIG.NOM)} ne garantit pas une disponibilité continue.</p>
+
+<h3>3. Catalogue de véhicules</h3>
+<p>Les fiches véhicules (photos, prix, kilométrage, équipements) proviennent de professionnels partenaires. Elles sont données à titre indicatif et peuvent contenir des erreurs.</p>
+<ul>
+  <li>Les photos ne sont pas contractuelles.</li>
+  <li>Les prix s'entendent TTC, hors frais de carte grise, de livraison et honoraires de mandat.</li>
+  <li>Une fiche n'est pas une offre ferme et la disponibilité n'est pas garantie.</li>
+  <li>Seul le mandat signé engage les parties. Les conditions de vente sont précisées dans les ${lk("cgv", "conditions générales de vente")}.</li>
+</ul>
+
+<h3>4. Demandes de contact</h3>
+<p>Le formulaire de contact et le bouton « Je suis intéressé » préparent un e-mail dans votre messagerie. Votre demande n'est transmise que lorsque vous envoyez ce message. Les informations que vous indiquez doivent être exactes.</p>
+
+<h3>5. Comportement de l'utilisateur</h3>
+<p>Vous vous engagez à utiliser le site de façon licite. Sont notamment interdits : l'extraction automatisée du contenu du site, toute tentative de perturber son fonctionnement et l'usurpation d'identité.</p>
+
+<h3>6. Propriété intellectuelle</h3>
+<p>Les contenus du site sont protégés. Leur reproduction ou leur réutilisation sans autorisation écrite est interdite. Voir les ${lk("mentions", "mentions légales")}.</p>
+
+<h3>7. Liens externes</h3>
+<p>Le site peut contenir des liens vers des sites tiers. ${esc(CONFIG.NOM)} n'est pas responsable de leur contenu.</p>
+
+<h3>8. Responsabilité</h3>
+<p>${esc(CONFIG.NOM)} s'efforce de fournir des informations exactes et à jour, sans pouvoir en garantir l'exactitude. Il n'est pas responsable des dommages liés à l'utilisation du site ou à son indisponibilité, sauf faute de sa part.</p>
+
+<h3>9. Données personnelles et cookies</h3>
+<p>Voir la ${lk("confidentialite", "politique de confidentialité")} et la ${lk("cookies", "politique de cookies")}.</p>
+
+<h3>10. Modification et droit applicable</h3>
+<p>Ces conditions peuvent être modifiées à tout moment ; la version en ligne fait foi. Elles sont soumises au droit français.</p>
+<p class="maj">Dernière mise à jour : ${esc(CONFIG.DATE_MAJ)}</p>`
+  },
+
+  confidentialite: {
+    slug: "confidentialite",
+    title: "Politique de confidentialité",
+    html: () => `
+<p>${esc(CONFIG.NOM)} protège vos données personnelles conformément au Règlement général sur la protection des données (RGPD) et à la loi Informatique et Libertés. Cette page explique quelles données sont collectées, pourquoi et comment exercer vos droits.</p>
+
+<h3>1. Responsable du traitement</h3>
+<p>${c(CONFIG.ENTREPRENEUR)}, exploitant ${esc(CONFIG.NOM)} – ${c(CONFIG.ADRESSE)} – ${esc(CONFIG.EMAIL)}.</p>
+
+<h3>2. Données collectées, finalités et durées de conservation</h3>
+<ul>
+  <li><strong>Demande de contact ou de recherche</strong> (formulaire, e-mail, téléphone) : nom, coordonnées et description de votre recherche. Finalité : répondre à votre demande. Base légale : mesures précontractuelles prises à votre demande. Durée : 3 ans après le dernier échange.</li>
+  <li><strong>Exécution d'un mandat</strong> : identité, adresse, coordonnées, copie de la pièce d'identité, du justificatif de domicile et du permis, données du véhicule, données de paiement. Base légale : exécution du contrat. Durée : celle du mandat, puis la durée de prescription applicable.</li>
+  <li><strong>Obligations légales</strong> (comptabilité, fiscalité) : factures et pièces comptables. Base légale : obligation légale. Durée : 10 ans.</li>
+</ul>
+<p>Le formulaire du site ne stocke aucune donnée : il prépare un e-mail dans votre messagerie. Les informations n'arrivent à ${esc(CONFIG.NOM)} que lorsque vous envoyez ce message.</p>
+
+<h3>3. Destinataires</h3>
+<p>Vos données sont destinées à ${esc(CONFIG.NOM)}. Elles peuvent être transmises, dans la mesure nécessaire à votre mandat, aux professionnels vendeurs, aux organismes et prestataires chargés de l'immatriculation, à la banque et à l'expert-comptable. Elles peuvent aussi être communiquées aux autorités lorsque la loi l'exige. Elles ne sont jamais vendues.</p>
+
+<h3>4. Transferts hors Union européenne</h3>
+<p>Le site est hébergé par GitHub, société américaine, qui peut traiter des données techniques de connexion comme votre adresse IP. La police de caractères du site est chargée depuis les serveurs de Google, ce qui transmet aussi votre adresse IP à Google. Ces transferts sont encadrés par les garanties prévues par le RGPD.</p>
+
+<h3>5. Vos droits</h3>
+<p>Vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation, d'opposition et de portabilité de vos données, ainsi que du droit de définir des directives sur leur sort après votre décès. Pour les exercer, écrivez à ${esc(CONFIG.EMAIL)}. Une pièce d'identité peut être demandée en cas de doute. Vous recevrez une réponse dans un délai d'un mois.</p>
+<p>Si vous estimez que vos droits ne sont pas respectés, vous pouvez saisir la CNIL (cnil.fr).</p>
+
+<h3>6. Sécurité</h3>
+<p>${esc(CONFIG.NOM)} met en œuvre des mesures raisonnables pour protéger vos données. Les e-mails ne sont pas chiffrés : n'y joignez que les documents utiles à votre demande.</p>
+
+<h3>7. Cookies</h3>
+<p>Voir la ${lk("cookies", "politique de cookies")}.</p>
+
+<h3>8. Mise à jour</h3>
+<p>Cette politique peut évoluer. La version en ligne fait foi.</p>
+<p class="maj">Dernière mise à jour : ${esc(CONFIG.DATE_MAJ)}</p>`
+  },
+
+  cookies: {
+    slug: "cookies",
+    title: "Politique de cookies",
+    html: () => `
+<h3>Qu'est-ce qu'un cookie ?</h3>
+<p>Un cookie est un petit fichier enregistré sur votre appareil lorsque vous visitez un site. Certains sont indispensables au fonctionnement du site ; d'autres servent à mesurer l'audience ou à afficher de la publicité et nécessitent votre accord.</p>
+
+<h3>Cookies sur ce site</h3>
+<p>À la date de mise à jour de cette page, le site ne dépose aucun cookie de mesure d'audience, de publicité ou de réseau social. Il n'utilise aucun traceur soumis à consentement, c'est pourquoi il n'affiche pas de bandeau de cookies.</p>
+
+<h3>Ressources externes</h3>
+<p>Le site charge sa police de caractères depuis Google Fonts : votre navigateur envoie alors une requête aux serveurs de Google, avec votre adresse IP. L'hébergeur peut également enregistrer des journaux techniques de connexion. Voir la ${lk("confidentialite", "politique de confidentialité")}.</p>
+
+<h3>Si cela évolue</h3>
+<p>Si un outil de mesure d'audience ou un contenu intégré déposant des cookies était ajouté, votre accord serait demandé avant tout dépôt, et vous pourriez le retirer à tout moment.</p>
+
+<h3>Gérer les cookies dans votre navigateur</h3>
+<p>Vous pouvez à tout moment supprimer ou bloquer les cookies depuis les paramètres de votre navigateur (Chrome, Firefox, Safari, Edge…), dans la rubrique « Confidentialité » ou « Cookies ».</p>
+
+<h3>Contact</h3>
+<p>Pour toute question : ${esc(CONFIG.EMAIL)}.</p>
+<p class="maj">Dernière mise à jour : ${esc(CONFIG.DATE_MAJ)}</p>`
+  }
+};
+
+const legalDlg = $("#legal");
+function openLegal(key){
+  const d = LEGAL[key]; if(!d) return;
+  legalDlg.innerHTML = `
+    <div class="doc">
+      <div class="dh"><h2>${esc(d.title)}</h2><button class="close" type="button" aria-label="Fermer">×</button></div>
+      <div class="in">${d.html()}</div>
+    </div>`;
+  if(!legalDlg.open) legalDlg.showModal();
+  legalDlg.scrollTop = 0;
+  try{ history.replaceState(null, "", "#" + d.slug); }catch(e){}
+}
+document.addEventListener("click", e => {
+  const a = e.target.closest("[data-legal]");
+  if(a){ e.preventDefault(); openLegal(a.dataset.legal); }
+});
+legalDlg.addEventListener("click", e => {
+  if(e.target === legalDlg || e.target.closest(".close")) legalDlg.close();
+});
+legalDlg.addEventListener("close", () => {
+  try{ history.replaceState(null, "", location.pathname + location.search); }catch(e){}
+});
+(() => {
+  const h = location.hash.slice(1);
+  const k = Object.keys(LEGAL).find(k => LEGAL[k].slug === h);
+  if(k) openLegal(k);
+})();
+
 /* Initialisation */
 document.title = CONFIG.NOM + " – Véhicules sélectionnés";
 (() => {
@@ -451,6 +747,7 @@ document.title = CONFIG.NOM + " – Véhicules sélectionnés";
   $("#brand").innerHTML = `${esc(parts.join(" "))} <span id="brandNum">${esc(num)}</span>`;
 })();
 $("#fNom").textContent = CONFIG.NOM;
+$("#fSiret").innerHTML = c(CONFIG.SIRET);
 $("#coord").innerHTML = `${esc(CONFIG.TEL)}<br>${esc(CONFIG.EMAIL)}`;
 ["q","fMarque","fEnergie","fBudget","tri"].forEach(id => $("#"+id).addEventListener("input", render));
 fetchVehicles().then(list => { ALL = list; fillFilters(); render(); });
